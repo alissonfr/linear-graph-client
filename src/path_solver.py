@@ -25,30 +25,19 @@ class PathSolver(ABC, Thread):
         return self._nodes
 
     @abstractmethod
-    def solve_path(self) -> None:
+    def solve(self) -> None:
         ...
 
-    @abstractmethod
     def to_dict(self) -> Dict[str, object]:
-        return {
-            'id': self.id,
-            'total_distance': self.total_distance,
-            'nodes': self.nodes
-        }
+        return {'id': self._id, 'total_distance': self._total_distance, 'nodes': self._nodes}
+
 
 class LinearPathSolver(PathSolver):
-    def solve_path(self) -> None:
+    def solve(self) -> None:
         for edge in self._path:
             self._total_distance += edge['distance']
             self._nodes.append(edge['node'])
 
-    def to_dict(self) -> Dict[str, object]:
-        return {
-            'id': self.id,
-            'total_distance': self.total_distance,
-            'nodes': self.nodes
-        }
-
     @override
     def run(self) -> None:
-        self.solve_path()
+        self.solve()
